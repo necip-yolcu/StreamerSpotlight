@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Page2 from './pages/Page2';
 
 function App() {
-  console.log("ehlelelo")
   return (
     <Router>
       <Routes>
