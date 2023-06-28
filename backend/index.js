@@ -1,3 +1,4 @@
+const cors = require("cors");
 const express = require('express')
 const app = express()
 const streamerRoutes = require('./routes/streamerRoutes')
@@ -5,6 +6,7 @@ const { prismaConnect, prismaDisconnect } = require('./prisma/PrismaClient')
 
 
 app.use(express.json({}));
+app.use(cors());
 
 app.use(prismaConnect)
 app.use('/streamers', streamerRoutes)
