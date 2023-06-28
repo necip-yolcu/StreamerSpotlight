@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
+import StreamerServices from '../services/StreamerServices'
 
 const StreamerSubmissionForm = () => {
     const {
@@ -9,12 +10,12 @@ const StreamerSubmissionForm = () => {
         formState: { errors },
     } = useForm()
 
-    const onSubmit = async(data) => {
+    const onSubmit = async (data) => {
         console.log("dataaa", data)
 
-        await axios.post('http://localhost:4000/streamers', {
+        await StreamerServices.addStreamer({
             ...data,
-            image: `https://picsum.photos/200/300?random=${Math.floor(Math.random()*1000)+1}`
+            image: `https://picsum.photos/200/300?random=${Math.floor(Math.random() * 1000) + 1}`
         })
             .then(response => {
                 console.log("response:", response)
