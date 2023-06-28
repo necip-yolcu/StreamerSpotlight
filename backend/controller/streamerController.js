@@ -1,5 +1,6 @@
 const addStreamer = async (req, res) => {
     try {
+        console.log("addStreamer:",req.body)
         const isExist = await req.prisma.Streamer.findFirst({
             where: { name: req.body?.name }
         })
