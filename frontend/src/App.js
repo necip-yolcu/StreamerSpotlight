@@ -8,7 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<Page1 />} />
-        <Route path='/record' element={<Page2 />} />
+        <Route path='/record/:streamID' element={<Page2 />} />
       </Routes>
     </Router>
   );
