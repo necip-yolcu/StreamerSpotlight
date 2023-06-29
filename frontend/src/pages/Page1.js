@@ -5,8 +5,8 @@ import StreamerList from '../components/StreamerList'
 const Page1 = () => {
   return (
     <div>
-        <StreamerSubmissionForm />
-        <StreamerList />
+      <StreamerSubmissionForm />
+      <StreamerList />
     </div>
   )
 }
