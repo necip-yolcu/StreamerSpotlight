@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import StreamerServices from '../services/StreamerServices';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStreams } from '../redux/streamSlice';
 
 const StreamerList = () => {
-    const [streamers, setStreamers] = useState([]);
+    const dispatch = useDispatch()
+    const streamers = useSelector(state => state.stream.streamList)
+    const loading = useSelector(state => state.stream.loading)
+    const error = useSelector(state => state.stream.error);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await StreamerServices.getAllStreamers()
-                    .then(response => {
-                        setStreamers(response);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching streamers:', error)
-                    })
-            } catch (error) {
-                console.error('Error fetching streamers:', error)
-            }
-        }
+        dispatch(fetchStreams())
+    }, [dispatch]);
 
-        fetchData()
-    }, []);
+
+    if (loading) {
+        return <div className="flex items-center justify-center p-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+    }
+
+    if (error) {
+        return <div className="bg-red-500 text-white p-4">
+            Error: {error}
+        </div>
+    }
+
 
     return (
         <div className="flex justify-center my-4">

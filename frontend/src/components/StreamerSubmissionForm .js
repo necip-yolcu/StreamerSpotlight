@@ -1,26 +1,25 @@
-import axios from 'axios'
-import React, { useState } from 'react'
+import React from 'react'
 import { useForm } from "react-hook-form"
-import StreamerServices from '../services/StreamerServices'
+import { useDispatch } from 'react-redux'
+import { postStream } from '../redux/streamSlice'
 
 const StreamerSubmissionForm = () => {
     const {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm()
+
+    const dispatch = useDispatch()
 
     const onSubmit = async (data) => {
         console.log("dataaa", data)
-
-        await StreamerServices.addStreamer({
+        dispatch(postStream({
             ...data,
             image: `https://picsum.photos/200/300?random=${Math.floor(Math.random() * 1000) + 1}`
-        })
-            .then(response => {
-                console.log("response:", response)
-            })
-            .catch(err => console.log("err:", err))
+        }))
+        reset()
     }
 
     return (
@@ -33,16 +32,23 @@ const StreamerSubmissionForm = () => {
                     <input
                         type="text"
                         defaultValue=""
-                        {...register("name")}
+                        {...register("name", { 
+                            required: "Streamer's Name is required" 
+                        })}
                         className="border border-gray-300 px-2 py-1 rounded-md w-full"
                     />
                 </label>
+                {errors.name && (
+                    <span className="text-red-500">Streamer's Name is required</span>
+                )}
 
                 <label className="block mb-2">
                     Streaming Platform:
                     <select
                         defaultValue=""
-                        {...register("platform")}
+                        {...register("platform", { 
+                            required: "Please select a streaming platform"
+                        })}
                         className="border border-gray-300 px-2 py-1 rounded-md w-full"
                     >
                         <option value="">Select a platform</option>
@@ -53,6 +59,9 @@ const StreamerSubmissionForm = () => {
                         <option value="Rumble">Rumble</option>
                     </select>
                 </label>
+                {errors.platform && (
+                    <span className="text-red-500">Please select a streaming platform</span>
+                )}
 
                 <label className="block mb-2">
                     Description:
@@ -62,14 +71,6 @@ const StreamerSubmissionForm = () => {
                         className="border border-gray-300 px-2 py-1 rounded-md w-full"
                     ></textarea>
                 </label>
-
-                {errors.streamerName && (
-                    <span className="text-red-500">Streamer's Name is required</span>
-                )}
-
-                {errors.platform && (
-                    <span className="text-red-500">Please select a streaming platform</span>
-                )}
 
                 <div className="flex justify-end">
                     <button
