@@ -74,7 +74,7 @@ const StreamerSubmissionForm = () => {
                 <div className="flex flex-col md:flex-row md:justify-end">
                     <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md md:ml-4"
+                        className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
                     >
                         Submit
                     </button>

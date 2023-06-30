@@ -10,6 +10,15 @@ const fetchStreams = createAsyncThunk('streams/fetchStreams', async () => {
     }
 })
 
+const fetchStreamByID = createAsyncThunk('/streams/fetchStreamByID', async(id) => {
+    try {
+        const response = await StreamerServices.getStreamerByID(id)
+        return response;
+    } catch (error) {
+        throw Error('Failed to fetch a stream', error.message)
+    }
+})
+
 const postStream = createAsyncThunk('stream/postStream', async (streamData) => {
     try {
         const response = await StreamerServices.addStreamer(streamData);
@@ -33,12 +42,13 @@ const streamSlice = createSlice({
     initialState: {
         streamList: [],
         loading: false,
-        error: null
+        error: null,
+        selected: null
     },
     reducers: { //synchronous actions
     },
     extraReducers: (builder) => {   //async thunk
-        //fetchStream
+        //fetchStreams
         builder.addCase(fetchStreams.pending, state => {
             state.loading = true
             state.error = null
@@ -49,6 +59,21 @@ const streamSlice = createSlice({
             state.streamList = action.payload
         })
         builder.addCase(fetchStreams.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.error.message
+        })
+
+        //fetchStreamByID
+        builder.addCase(fetchStreamByID.pending, state => {
+            state.loading = true
+            state.error = null
+        })
+        builder.addCase(fetchStreamByID.fulfilled, (state, action) => {
+            state.loading = false
+            state.error = null
+            state.selected = action.payload
+        })
+        builder.addCase(fetchStreamByID.rejected, (state, action) => {
             state.loading = false
             state.error = action.error.message
         })
@@ -96,4 +121,4 @@ const streamSlice = createSlice({
 })
 
 export default streamSlice.reducer
-export { fetchStreams, postStream, updateVoteStream } 
+export { fetchStreams, fetchStreamByID, postStream, updateVoteStream } 
