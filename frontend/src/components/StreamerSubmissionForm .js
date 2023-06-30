@@ -14,7 +14,6 @@ const StreamerSubmissionForm = () => {
     const dispatch = useDispatch()
 
     const onSubmit = async (data) => {
-        console.log("dataaa", data)
         dispatch(postStream({
             ...data,
             image: `https://picsum.photos/200/300?random=${Math.floor(Math.random() * 1000) + 1}`
