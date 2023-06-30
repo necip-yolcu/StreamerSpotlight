@@ -19,6 +19,15 @@ const postStream = createAsyncThunk('stream/postStream', async (streamData) => {
     }
 })
 
+const updateVoteStream = createAsyncThunk('stream/updateVoteStream', async ({streamerId, vote}) => {
+    try {
+        const response = await StreamerServices.updateVoteByID(streamerId, { "action": vote })
+        return response;
+    } catch (error) {
+        throw new Error('Failed to update upvote: ' + error.message);
+    }
+})
+
 const streamSlice = createSlice({
     name: "stream",
     initialState: {
@@ -58,8 +67,33 @@ const streamSlice = createSlice({
             state.loading = false
             state.error = action.error.message
         })
+
+        //updateStream
+        builder.addCase(updateVoteStream.pending, state => {
+            state.loading = true
+            state.error = null
+        })
+        builder.addCase(updateVoteStream.fulfilled, (state, action) => {
+            state.loading = false
+            state.error = null
+
+            //state not update here
+            /* const willUpdate = state.streamList?.find(stream => stream.id === action.payload.id)
+            willUpdate.upvote = action.payload.upvote
+            willUpdate.downvote = action.payload.downvote */
+
+            const streamIndex = state.streamList?.findIndex(stream => stream.id === action.payload.id);
+            if (streamIndex !== -1) {
+                state.streamList[streamIndex].upvote = action.payload.upvote;
+                state.streamList[streamIndex].downvote = action.payload.downvote;
+            }
+        })
+        builder.addCase(updateVoteStream.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.error.message
+        })
     }
 })
 
 export default streamSlice.reducer
-export { fetchStreams, postStream } 
+export { fetchStreams, postStream, updateVoteStream } 

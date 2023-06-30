@@ -13,8 +13,8 @@ const StreamerServices = {
         return requests.get(`/streamers/${id}`)
     },
 
-    updateVoteByID() {
-        return requests.put('/')
+    updateVoteByID(id, body) {
+        return requests.put(`/streamers/${id}/vote`, body)
     }
 
 }
